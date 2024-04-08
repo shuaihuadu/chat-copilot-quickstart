@@ -5,6 +5,10 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImportDocument", "tools\ImportDocument\ImportDocument.csproj", "{5E07660B-F069-4007-9F74-A270E3C5ED42}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCopilot.Shared", "shared\ChatCopilot.Shared\ChatCopilot.Shared.csproj", "{F2EE1EAA-6629-4BF7-B7CA-9F5C69A277B9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCopilot.WebApi", "webapi\ChatCopilot.WebApi\ChatCopilot.WebApi.csproj", "{C755CE0D-3C30-4411-B896-6CFF08F82754}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{5E07660B-F069-4007-9F74-A270E3C5ED42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E07660B-F069-4007-9F74-A270E3C5ED42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E07660B-F069-4007-9F74-A270E3C5ED42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2EE1EAA-6629-4BF7-B7CA-9F5C69A277B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2EE1EAA-6629-4BF7-B7CA-9F5C69A277B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2EE1EAA-6629-4BF7-B7CA-9F5C69A277B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2EE1EAA-6629-4BF7-B7CA-9F5C69A277B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C755CE0D-3C30-4411-B896-6CFF08F82754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C755CE0D-3C30-4411-B896-6CFF08F82754}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C755CE0D-3C30-4411-B896-6CFF08F82754}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C755CE0D-3C30-4411-B896-6CFF08F82754}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
