@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.35.240321.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\shared\ChatCopilot.Shared\ChatCopilot.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

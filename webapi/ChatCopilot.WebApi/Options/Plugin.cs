@@ -1,12 +1,12 @@
 ﻿namespace ChatCopilot.WebApi.Options
 {
-    public class PluginOptions
+    public class Plugin
     {
-        public const string PropertyName = "Plugin";
+        public const string PropertyName = "Plugins";
 
         public string Name { get; set; } = string.Empty;
 
-        public Uri ManifestDomainP { get; set; } = new Uri("http://localhost");
+        public Uri ManifestDomain { get; set; } = new Uri("http://localhost");
 
         public string Key { get; set; } = string.Empty;
     }

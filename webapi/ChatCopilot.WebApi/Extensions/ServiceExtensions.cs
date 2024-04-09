@@ -1,4 +1,7 @@
-﻿namespace ChatCopilot.WebApi.Extensions;
+﻿using ChatCopilot.WebApi.Utilities;
+using Microsoft.KernelMemory.Diagnostics;
+
+namespace ChatCopilot.WebApi.Extensions;
 
 public static class ServiceExtensions
 {
@@ -18,12 +21,11 @@ public static class ServiceExtensions
 
         AddOptions<ContentSafetyOptions>(ContentSafetyOptions.PropertyName);
 
-        //AddOptions<KernelMemoryConfig>(MemoryCon)
+        AddOptions<KernelMemoryConfig>(MemoryConfiguration.KernelMemorySection);
 
         AddOptions<FrontendOptions>(FrontendOptions.PropertyName);
 
         return services;
-
 
         void AddOptions<TOptions>(string propertyName) where TOptions : class
         {
@@ -38,6 +40,70 @@ public static class ServiceExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart()
             .PostConfigure(TrimStringProperties);
+    }
+
+    internal static IServiceCollection AddPlugins(this IServiceCollection services, IConfiguration configuration)
+    {
+        List<Plugin> plugins = configuration.GetSection(Plugin.PropertyName).Get<List<Plugin>>() ?? [];
+
+        ILogger<Program> logger = services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
+
+        logger.LogDebug("Found {0} plugins.", plugins.Count);
+
+        Dictionary<string, Plugin> validatedPlugins = [];
+
+        foreach (Plugin plugin in plugins)
+        {
+            if (validatedPlugins.ContainsKey(plugin.Name))
+            {
+                logger.LogWarning("Plugin '{0}' is defined more than once. Skipping...", plugin.Name);
+
+                continue;
+            }
+
+            Uri pluginManifestUrl = PluginUtils.GetPluginManifestUri(plugin.ManifestDomain);
+
+            using HttpRequestMessage request = new(HttpMethod.Post, pluginManifestUrl);
+
+            request.Headers.Add("User-Agent", Telemetry.HttpUserAgent);
+
+            try
+            {
+                logger.LogInformation("Adding plugin: {0}", plugin.Name);
+
+                using HttpClient httpClient = new();
+
+                HttpResponseMessage response = httpClient.SendAsync(request).Result;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new InvalidOperationException($"Plugin '{plugin.Name}' at '{pluginManifestUrl}' returned status code '{response.StatusCode}'.");
+                }
+
+                validatedPlugins.Add(plugin.Name, plugin);
+
+                logger.LogInformation("Added plugin: {0}.", plugin.Name);
+            }
+            catch (Exception ex) when (ex is InvalidOperationException || ex is AggregateException)
+            {
+                logger.LogWarning(ex, "Plugin '{0}' at {1} responded with error. Skipping...", plugin.Name, pluginManifestUrl);
+            }
+            catch (Exception ex) when (ex is UriFormatException)
+            {
+                logger.LogInformation("Plugin '{0}' at {1} is not a valid URL. Skipping...", plugin.Name, pluginManifestUrl);
+            }
+        }
+
+        services.AddSingleton<IDictionary<string, Plugin>>(validatedPlugins);
+
+        return services;
+    }
+
+    internal static IServiceCollection AddPersistentChatStore(this IServiceCollection services)
+    {
+        //IStorageContext<ChatSession>
+
+        return services;
     }
 
     private static void TrimStringProperties<T>(T options) where T : class

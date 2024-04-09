@@ -1,9 +1,16 @@
 ﻿global using Azure.Identity;
+global using ChatCopilot.Shared;
 global using ChatCopilot.WebApi.Attributes;
 global using ChatCopilot.WebApi.Extensions;
 global using ChatCopilot.WebApi.Models.Request;
+global using ChatCopilot.WebApi.Models.Response;
+global using ChatCopilot.WebApi.Models.Storage;
 global using ChatCopilot.WebApi.Options;
+global using ChatCopilot.WebApi.Storage;
 global using Microsoft.KernelMemory;
 global using Microsoft.KernelMemory.MemoryStorage.DevTools;
 global using System.ComponentModel.DataAnnotations;
+global using System.Globalization;
 global using System.Reflection;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;

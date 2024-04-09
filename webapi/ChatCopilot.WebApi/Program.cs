@@ -10,7 +10,20 @@ public sealed class Program
         builder.WebHost.UseUrls();
 
         builder.Services.AddSingleton<ILogger>(sp => sp.GetRequiredService<ILogger<Program>>())
-            .AddOptions(builder.Configuration);
+            .AddOptions(builder.Configuration)
+            .AddPersistentChatStore()
+            .AddPlugins(builder.Configuration)
+            .AddChatCopilotAuthentication(builder.Configuration)
+            .AddChatCopilotAuthorization();
+
+        builder.AddBotConfig()
+            .AddSemanticKernelServices()
+            .AddSemanticMemoryServices();
+
+        builder.Services.AddSignalR();
+
+        builder.Services.AddHttpContextAccessor()
+            .AddApplicationInsightsTelemetry();
 
         var app = builder.Build();
 
