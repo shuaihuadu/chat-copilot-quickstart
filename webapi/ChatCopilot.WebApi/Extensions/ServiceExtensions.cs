@@ -1,8 +1,4 @@
-﻿using ChatCopilot.WebApi.Utilities;
-using Microsoft.Extensions.Options;
-using Microsoft.KernelMemory.Diagnostics;
-
-namespace ChatCopilot.WebApi.Extensions;
+﻿namespace ChatCopilot.WebApi.Extensions;
 
 public static class ServiceExtensions
 {
@@ -137,7 +133,10 @@ public static class ServiceExtensions
                 {
                     throw new InvalidOperationException("ChatStore:Cosmos is required when ChatStore:Type is 'Cosmos'");
                 }
-
+                chatSessionStorageContext = new CosmosDbContext<ChatSession>(chatStoreOptions.Cosmos.ConnectionString, chatStoreOptions.Cosmos.Database, chatStoreOptions.Cosmos.ChatSessionsContainer);
+                copilotChatMessageStorageContext = new CosmosDbCopilotChatMessageContext(chatStoreOptions.Cosmos.ConnectionString, chatStoreOptions.Cosmos.Database, chatStoreOptions.Cosmos.ChatMessagesContainer);
+                chatMemorySourceStorageContext = new CosmosDbContext<MemorySource>(chatStoreOptions.Cosmos.ConnectionString, chatStoreOptions.Cosmos.Database, chatStoreOptions.Cosmos.ChatMemorySourcesContainer);
+                chatParticipantStorageContext = new CosmosDbContext<ChatParticipant>(chatStoreOptions.Cosmos.ConnectionString, chatStoreOptions.Cosmos.Database, chatStoreOptions.Cosmos.ChatParticipantsContainer);
                 break;
             default:
                 throw new InvalidOperationException("Invalid 'ChatStore' setting 'chatStoreConfig.Type'.");
