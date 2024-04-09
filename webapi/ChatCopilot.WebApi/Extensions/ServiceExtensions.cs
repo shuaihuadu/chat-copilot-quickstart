@@ -101,7 +101,10 @@ public static class ServiceExtensions
 
     internal static IServiceCollection AddPersistentChatStore(this IServiceCollection services)
     {
-        //IStorageContext<ChatSession>
+        IStorageContext<ChatSession> chatSessionStorageContext;
+        ICopilotChatMessageStorageContext copilotChatMessageStorageContext;
+        IStorageContext<MemorySource> chatMemorySourceStorageContext;
+        IStorageContext<ChatParticipant> chatParticipantStorageContext;
 
         return services;
     }
