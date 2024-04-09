@@ -118,11 +118,29 @@ public static class ServiceExtensions
                 chatParticipantStorageContext = new VolatileContext<ChatParticipant>();
                 break;
             case ChatStoreOptions.ChatStoreType.FileSystem:
+
+                if (chatStoreOptions.FileSystem == null)
+                {
+                    throw new InvalidOperationException("ChatStore:FileSystem is required when ChatStore:Type is 'FileSystem'");
+                }
+
+                string fullPath = Path.GetFullPath(chatStoreOptions.FileSystem.FilePath);
+                string directory = Path.GetDirectoryName(fullPath) ?? string.Empty;
+
+                chatSessionStorageContext = new FileSystemContext<ChatSession>(new FileInfo(Path.Join(directory, $"{Path.GetFileNameWithoutExtension(fullPath)}_sessions{Path.GetExtension(fullPath)}")));
+                copilotChatMessageStorageContext = new FileSystemCopilotChatMessageContext(new FileInfo(Path.Join(directory, $"{Path.GetFileNameWithoutExtension(fullPath)}_messages{Path.GetExtension(fullPath)}")));
+                chatMemorySourceStorageContext = new FileSystemContext<MemorySource>(new FileInfo(Path.Join(directory, $"{Path.GetFileNameWithoutExtension(fullPath)}_memorysources{Path.GetExtension(fullPath)}")));
+                chatParticipantStorageContext = new FileSystemContext<ChatParticipant>(new FileInfo(Path.Join(directory, $"{Path.GetFileNameWithoutExtension(fullPath)}_participants{Path.GetExtension(fullPath)}")));
                 break;
             case ChatStoreOptions.ChatStoreType.Cosmos:
+                if (chatStoreOptions.Cosmos == null)
+                {
+                    throw new InvalidOperationException("ChatStore:Cosmos is required when ChatStore:Type is 'Cosmos'");
+                }
+
                 break;
             default:
-                break;
+                throw new InvalidOperationException("Invalid 'ChatStore' setting 'chatStoreConfig.Type'.");
         }
 
         return services;
