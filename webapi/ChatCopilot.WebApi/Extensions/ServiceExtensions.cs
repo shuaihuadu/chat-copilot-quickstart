@@ -99,7 +99,7 @@ public static class ServiceExtensions
     internal static IServiceCollection AddPersistentChatStore(this IServiceCollection services)
     {
         IStorageContext<ChatSession> chatSessionStorageContext;
-        ICopilotChatMessageStorageContext copilotChatMessageStorageContext;
+        ICopilotChatMessageStorageContext chatMessageStorageContext;
         IStorageContext<MemorySource> chatMemorySourceStorageContext;
         IStorageContext<ChatParticipant> chatParticipantStorageContext;
 
@@ -109,7 +109,7 @@ public static class ServiceExtensions
         {
             case ChatStoreOptions.ChatStoreType.Volatile:
                 chatSessionStorageContext = new VolatileContext<ChatSession>();
-                copilotChatMessageStorageContext = new VolatileCopilotChatMessageContext();
+                chatMessageStorageContext = new VolatileCopilotChatMessageContext();
                 chatMemorySourceStorageContext = new VolatileContext<MemorySource>();
                 chatParticipantStorageContext = new VolatileContext<ChatParticipant>();
                 break;
@@ -124,7 +124,7 @@ public static class ServiceExtensions
                 string directory = Path.GetDirectoryName(fullPath) ?? string.Empty;
 
                 chatSessionStorageContext = new FileSystemContext<ChatSession>(new FileInfo(Path.Join(directory, $"{Path.GetFileNameWithoutExtension(fullPath)}_sessions{Path.GetExtension(fullPath)}")));
-                copilotChatMessageStorageContext = new FileSystemCopilotChatMessageContext(new FileInfo(Path.Join(directory, $"{Path.GetFileNameWithoutExtension(fullPath)}_messages{Path.GetExtension(fullPath)}")));
+                chatMessageStorageContext = new FileSystemCopilotChatMessageContext(new FileInfo(Path.Join(directory, $"{Path.GetFileNameWithoutExtension(fullPath)}_messages{Path.GetExtension(fullPath)}")));
                 chatMemorySourceStorageContext = new FileSystemContext<MemorySource>(new FileInfo(Path.Join(directory, $"{Path.GetFileNameWithoutExtension(fullPath)}_memorysources{Path.GetExtension(fullPath)}")));
                 chatParticipantStorageContext = new FileSystemContext<ChatParticipant>(new FileInfo(Path.Join(directory, $"{Path.GetFileNameWithoutExtension(fullPath)}_participants{Path.GetExtension(fullPath)}")));
                 break;
@@ -134,13 +134,18 @@ public static class ServiceExtensions
                     throw new InvalidOperationException("ChatStore:Cosmos is required when ChatStore:Type is 'Cosmos'");
                 }
                 chatSessionStorageContext = new CosmosDbContext<ChatSession>(chatStoreOptions.Cosmos.ConnectionString, chatStoreOptions.Cosmos.Database, chatStoreOptions.Cosmos.ChatSessionsContainer);
-                copilotChatMessageStorageContext = new CosmosDbCopilotChatMessageContext(chatStoreOptions.Cosmos.ConnectionString, chatStoreOptions.Cosmos.Database, chatStoreOptions.Cosmos.ChatMessagesContainer);
+                chatMessageStorageContext = new CosmosDbCopilotChatMessageContext(chatStoreOptions.Cosmos.ConnectionString, chatStoreOptions.Cosmos.Database, chatStoreOptions.Cosmos.ChatMessagesContainer);
                 chatMemorySourceStorageContext = new CosmosDbContext<MemorySource>(chatStoreOptions.Cosmos.ConnectionString, chatStoreOptions.Cosmos.Database, chatStoreOptions.Cosmos.ChatMemorySourcesContainer);
                 chatParticipantStorageContext = new CosmosDbContext<ChatParticipant>(chatStoreOptions.Cosmos.ConnectionString, chatStoreOptions.Cosmos.Database, chatStoreOptions.Cosmos.ChatParticipantsContainer);
                 break;
             default:
                 throw new InvalidOperationException("Invalid 'ChatStore' setting 'chatStoreConfig.Type'.");
         }
+
+        services.AddSingleton(new ChatSessionRepository(chatSessionStorageContext));
+        services.AddSingleton(new ChatMessageRepository(chatMessageStorageContext));
+        services.AddSingleton(new ChatMemorySourceRepository(chatMemorySourceStorageContext));
+        services.AddSingleton(new ChatParticipantRepository(chatParticipantStorageContext));
 
         return services;
     }
