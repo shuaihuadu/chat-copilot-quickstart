@@ -2,7 +2,7 @@
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddOptions(this IServiceCollection services, ConfigurationManager configuration)
+    internal static IServiceCollection AddOptions(this IServiceCollection services, ConfigurationManager configuration)
     {
         AddOptions<ServiceOptions>(ServiceOptions.PropertyName);
 
@@ -146,6 +146,50 @@ public static class ServiceExtensions
         services.AddSingleton(new ChatMessageRepository(chatMessageStorageContext));
         services.AddSingleton(new ChatMemorySourceRepository(chatMemorySourceStorageContext));
         services.AddSingleton(new ChatParticipantRepository(chatParticipantStorageContext));
+
+        return services;
+    }
+
+    internal static IServiceCollection AddChatCopilotAuthorization(this IServiceCollection services)
+    {
+        return services.AddScoped<IAuthorizationHandler, ChatParticipantAuthorizationHandler>()
+            .AddAuthorizationCore(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                options.AddPolicy(AuthPolicyName.RequireChatParticipant, builder =>
+                {
+                    builder.RequireAuthenticatedUser()
+                        .AddRequirements(new ChatParticipantRequirement());
+                });
+            });
+    }
+
+    internal static IServiceCollection AddChatCopilotAuthentication(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddScoped<IAuthInfo, AuthInfo>();
+
+        ChatAuthenticationOptions chatAuthenticationOptions = services.BuildServiceProvider().GetRequiredService<IOptions<ChatAuthenticationOptions>>().Value;
+
+        switch (chatAuthenticationOptions.Type)
+        {
+            case ChatAuthenticationOptions.AuthenticationType.None:
+                services.AddAuthentication(PassThroughAuthenticationHandler.AuthenticationScheme)
+                    .AddScheme<AuthenticationSchemeOptions, PassThroughAuthenticationHandler>(
+                    authenticationScheme: PassThroughAuthenticationHandler.AuthenticationScheme,
+                    configureOptions: null);
+
+                break;
+            case ChatAuthenticationOptions.AuthenticationType.AzureAd:
+                services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddMicrosoftIdentityWebApi(configuration.GetSection($"{ChatAuthenticationOptions.PropertyName}:AzureAd"));
+
+                break;
+            default:
+                throw new InvalidOperationException($"Invalid authentication type '{chatAuthenticationOptions.Type}'.");
+        }
 
         return services;
     }
