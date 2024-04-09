@@ -1,4 +1,5 @@
 ﻿using ChatCopilot.WebApi.Utilities;
+using Microsoft.Extensions.Options;
 using Microsoft.KernelMemory.Diagnostics;
 
 namespace ChatCopilot.WebApi.Extensions;
@@ -105,6 +106,24 @@ public static class ServiceExtensions
         ICopilotChatMessageStorageContext copilotChatMessageStorageContext;
         IStorageContext<MemorySource> chatMemorySourceStorageContext;
         IStorageContext<ChatParticipant> chatParticipantStorageContext;
+
+        ChatStoreOptions chatStoreOptions = services.BuildServiceProvider().GetRequiredService<IOptions<ChatStoreOptions>>().Value;
+
+        switch (chatStoreOptions.Type)
+        {
+            case ChatStoreOptions.ChatStoreType.Volatile:
+                chatSessionStorageContext = new VolatileContext<ChatSession>();
+                copilotChatMessageStorageContext = new VolatileCopilotChatMessageContext();
+                chatMemorySourceStorageContext = new VolatileContext<MemorySource>();
+                chatParticipantStorageContext = new VolatileContext<ChatParticipant>();
+                break;
+            case ChatStoreOptions.ChatStoreType.FileSystem:
+                break;
+            case ChatStoreOptions.ChatStoreType.Cosmos:
+                break;
+            default:
+                break;
+        }
 
         return services;
     }
