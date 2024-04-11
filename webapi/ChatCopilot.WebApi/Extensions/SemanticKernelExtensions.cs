@@ -1,6 +1,4 @@
-﻿using Microsoft.SemanticKernel.Plugins.Core;
-
-namespace ChatCopilot.WebApi.Extensions;
+﻿namespace ChatCopilot.WebApi.Extensions;
 
 internal static class SemanticKernelExtensions
 {

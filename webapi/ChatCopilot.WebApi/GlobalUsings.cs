@@ -20,6 +20,7 @@ global using Microsoft.KernelMemory;
 global using Microsoft.KernelMemory.Diagnostics;
 global using Microsoft.KernelMemory.MemoryStorage.DevTools;
 global using Microsoft.SemanticKernel;
+global using Microsoft.SemanticKernel.Plugins.Core;
 global using System.Collections.Concurrent;
 global using System.ComponentModel.DataAnnotations;
 global using System.Diagnostics;
