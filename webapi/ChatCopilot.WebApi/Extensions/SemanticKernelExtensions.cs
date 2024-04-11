@@ -26,13 +26,37 @@ internal static class SemanticKernelExtensions
         builder.Services.AddContentSafty();
 
         builder.Services.AddScoped<RegisterFunctionsWithKernel>(sp => RegisterChatCopilotFunctionsAsync);
+
+        return builder;
     }
 
-    private static async Task RegisterChatCopilotFunctionsAsync(IServiceProvider sp, Kernel kernel)
+    private static Task RegisterChatCopilotFunctionsAsync(IServiceProvider sp, Kernel kernel)
     {
         kernel.RegisterChatPlugin(sp);
 
         kernel.ImportPluginFromObject(new TimePlugin(), nameof(TimePlugin));
+
+        return Task.CompletedTask;
+    }
+
+    private static Kernel RegisterChatPlugin(this Kernel kernel, IServiceProvider sp)
+    {
+        kernel.ImportPluginFromObject(
+            new ChatPlugin(
+                kernel,
+                memoryClient: sp.GetRequiredService<IKernelMemory>(),
+                chatMessageRepository: sp.GetRequiredService<ChatMessageRepository>(),
+                chatSessionRepository: sp.GetRequiredService<ChatSessionRepository>(),
+                messageRelayHubContext: sp.GetRequiredService<IHubContext<MessageRelayHub>>(),
+                promptOptions: sp.GetRequiredService<IOptions<PromptsOptions>>(),
+                documentImportOptions: sp.GetRequiredService<IOptions<DocumentMemoryOptions>>(),
+                contentSafety: sp.GetRequiredService<AzureContentSafty>(),
+                logger: sp.GetRequiredService<ILogger<ChatPlugin>>()
+            ),
+            nameof(ChatPlugin)
+        );
+
+        return kernel;
     }
 
     private static void InitializeKernelProvider(this WebApplicationBuilder builder)
@@ -83,5 +107,61 @@ internal static class SemanticKernelExtensions
             default:
                 throw new ArgumentException($"Invalid {nameof(kernelMemoryConfig.Retrieval.EmbeddingGeneratorType)} value in 'SemanticMemory' settings.");
         }
+    }
+
+    private static Task RegisterPluginsAsync(IServiceProvider sp, Kernel kernel)
+    {
+        ILogger? logger = kernel.LoggerFactory.CreateLogger(nameof(Kernel));
+
+        ServiceOptions options = sp.GetRequiredService<IOptions<ServiceOptions>>().Value;
+
+        if (!string.IsNullOrWhiteSpace(options.SemanticPluginsDirectory))
+        {
+            foreach (string subDir in Directory.GetDirectories(options.SemanticPluginsDirectory))
+            {
+                try
+                {
+                    kernel.ImportPluginFromPromptDirectory(options.SemanticPluginsDirectory, Path.GetFileName(subDir));
+                }
+                catch (KernelException ex)
+                {
+                    logger.LogError("Could not load plugin from {Directory}: {Message}", subDir, ex.Message);
+                }
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(options.NativePluginsDirectory))
+        {
+            string[] pluginFiles = Directory.GetFiles(options.NativePluginsDirectory, "*.cs");
+
+            foreach (string pluginFile in pluginFiles)
+            {
+                string className = Path.GetFileNameWithoutExtension(pluginFile);
+
+                Assembly assembly = Assembly.GetExecutingAssembly();
+
+                Type? classType = assembly.GetTypes().FirstOrDefault(t => t.Name.Contains(className, StringComparison.CurrentCultureIgnoreCase));
+
+                if (classType != null)
+                {
+                    try
+                    {
+                        object? plugin = Activator.CreateInstance(classType);
+
+                        kernel.ImportPluginFromObject(plugin!, classType.Name);
+                    }
+                    catch (KernelException ex)
+                    {
+                        logger.LogError("Could not load plugin from file {File}: {Details}", pluginFile, ex.Message);
+                    }
+                }
+                else
+                {
+                    logger.LogError("Class type not found. Make sure the class type matches exactly with the file name {FileName}", className);
+                }
+            }
+        }
+
+        return Task.CompletedTask;
     }
 }
