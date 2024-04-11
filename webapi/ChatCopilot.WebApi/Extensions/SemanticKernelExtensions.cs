@@ -49,7 +49,7 @@ internal static class SemanticKernelExtensions
         ContentSafetyOptions contentSafetyOptions = configuration.GetSection(ContentSafetyOptions.PropertyName).Get<ContentSafetyOptions>()
             ?? new ContentSafetyOptions { Enabled = false };
 
-        services.AddSingleton<IContentS>
+        services.AddSingleton<IContentSaftyService>(sp => new AzureContentSafty(contentSafetyOptions.Endpoint, contentSafetyOptions.Key));
     }
 
     public static WebApplicationBuilder AddBotConfig(this WebApplicationBuilder builder)
