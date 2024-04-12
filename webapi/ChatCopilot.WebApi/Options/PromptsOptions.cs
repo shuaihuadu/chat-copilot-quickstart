@@ -114,7 +114,7 @@ public class PromptsOptions
 
     internal string WorkingMemory => string.Join("\n", this.WorkingMemoryPromptComponents);
 
-    internal IDictionary<string, string> MemoryMao => new Dictionary<string, string>()
+    internal IDictionary<string, string> MemoryMap => new Dictionary<string, string>()
     {
         {this.LongTermMemoryName,this.LongTermMemory},
         {this.WorkingMemoryName,this.WorkingMemory}

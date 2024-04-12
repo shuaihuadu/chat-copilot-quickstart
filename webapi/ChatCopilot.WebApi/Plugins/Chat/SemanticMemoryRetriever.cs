@@ -10,9 +10,9 @@ public class SemanticMemoryRetriever
 
     public SemanticMemoryRetriever(
         IOptions<PromptsOptions> promptsOptions,
-        ChatSessionRepository chatSessionRepository,
         IKernelMemory kernelMemory,
-        ILogger logger)
+        ILogger logger,
+        ChatSessionRepository chatSessionRepository)
     {
         this._promptOptions = promptsOptions.Value;
         this._chatSessionRepository = chatSessionRepository;
