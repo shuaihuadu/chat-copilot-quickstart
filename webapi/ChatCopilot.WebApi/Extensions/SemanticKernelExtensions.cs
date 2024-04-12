@@ -44,7 +44,7 @@ internal static class SemanticKernelExtensions
         kernel.ImportPluginFromObject(
             new ChatPlugin(
                 kernel,
-                memoryClient: sp.GetRequiredService<IKernelMemory>(),
+                kernelMemory: sp.GetRequiredService<IKernelMemory>(),
                 chatMessageRepository: sp.GetRequiredService<ChatMessageRepository>(),
                 chatSessionRepository: sp.GetRequiredService<ChatSessionRepository>(),
                 messageRelayHubContext: sp.GetRequiredService<IHubContext<MessageRelayHub>>(),

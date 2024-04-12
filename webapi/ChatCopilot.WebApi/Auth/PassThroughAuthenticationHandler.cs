@@ -30,4 +30,6 @@ public class PassThroughAuthenticationHandler : AuthenticationHandler<Authentica
 
         return Task.FromResult(AuthenticateResult.Success(ticket));
     }
+
+    public static bool IsDefaultUser(string userId) => userId == DefaultUserId;
 }
