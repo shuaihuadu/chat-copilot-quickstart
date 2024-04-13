@@ -1,5 +1,6 @@
 ﻿namespace ChatCopilot.WebApi.Controllers;
 
+[ApiController]
 public class MaintenanceController : ControllerBase
 {
     internal const string GlobalSiteMaintenance = "GlobalSiteMaintenance";
