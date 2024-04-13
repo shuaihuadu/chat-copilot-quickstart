@@ -10,7 +10,7 @@ internal static class ConfigurationExtensions
         {
             configBuilder.AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true);
 
-            configBuilder.AddJsonFile(path: $"appsettiongs.{envrionment}.json", true, true);
+            configBuilder.AddJsonFile(path: @"D:\appsettings\chat-copilot.json", true, true);
 
             configBuilder.AddEnvironmentVariables();
 

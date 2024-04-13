@@ -10,7 +10,7 @@ internal static class SemanticKernelExtensions
     {
         builder.InitializeKernelProvider();
 
-        builder.Services.AddScoped<Kernel>(sp =>
+        builder.Services.AddScoped(sp =>
         {
             SemanticKernelProvider provider = sp.GetRequiredService<SemanticKernelProvider>();
 
@@ -45,13 +45,13 @@ internal static class SemanticKernelExtensions
             new ChatPlugin(
                 kernel,
                 kernelMemory: sp.GetRequiredService<IKernelMemory>(),
-                chatMessageRepository: sp.GetRequiredService<ChatMessageRepository>(),
-                chatSessionRepository: sp.GetRequiredService<ChatSessionRepository>(),
                 messageRelayHubContext: sp.GetRequiredService<IHubContext<MessageRelayHub>>(),
+                logger: sp.GetRequiredService<ILogger<ChatPlugin>>(),
                 promptOptions: sp.GetRequiredService<IOptions<PromptsOptions>>(),
                 documentImportOptions: sp.GetRequiredService<IOptions<DocumentMemoryOptions>>(),
-                contentSafety: sp.GetRequiredService<AzureContentSafety>(),
-                logger: sp.GetRequiredService<ILogger<ChatPlugin>>()
+                contentSafetyService: sp.GetRequiredService<IContentSafetyService>(),
+                chatMessageRepository: sp.GetRequiredService<ChatMessageRepository>(),
+                chatSessionRepository: sp.GetRequiredService<ChatSessionRepository>()
             ),
             nameof(ChatPlugin)
         );

@@ -8,7 +8,7 @@ internal class ChatPlugin
     private readonly ILogger<ChatPlugin> _logger;
     private readonly PromptsOptions _promptOptions;
     private readonly DocumentMemoryOptions _documentImportOptions;
-    private readonly AzureContentSafety _contentSafety;
+    private readonly IContentSafetyService _contentSafetyService;
     private readonly ChatMessageRepository _chatMessageRepository;
     private readonly ChatSessionRepository _chatSessionRepository;
 
@@ -22,9 +22,9 @@ internal class ChatPlugin
         ILogger<ChatPlugin> logger,
         IOptions<PromptsOptions> promptOptions,
         IOptions<DocumentMemoryOptions> documentImportOptions,
+        IContentSafetyService contentSafetyService,
         ChatMessageRepository chatMessageRepository,
-        ChatSessionRepository chatSessionRepository,
-        AzureContentSafety contentSafety)
+        ChatSessionRepository chatSessionRepository)
     {
         this._kernel = kernel;
         this._kernelMemory = kernelMemory;
@@ -32,9 +32,9 @@ internal class ChatPlugin
         this._logger = logger;
         this._promptOptions = promptOptions.Value;
         this._documentImportOptions = documentImportOptions.Value;
+        this._contentSafetyService = contentSafetyService;
         this._chatMessageRepository = chatMessageRepository;
         this._chatSessionRepository = chatSessionRepository;
-        this._contentSafety = contentSafety;
 
         this._semanticMemoryRetriever = new SemanticMemoryRetriever(promptOptions, kernelMemory, logger, chatSessionRepository);
     }
