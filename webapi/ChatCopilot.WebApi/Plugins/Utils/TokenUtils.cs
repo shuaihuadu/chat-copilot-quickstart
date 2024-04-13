@@ -1,6 +1,4 @@
-﻿using Microsoft.SemanticKernel.ChatCompletion;
-
-namespace ChatCopilot.WebApi.Plugins.Utils;
+﻿namespace ChatCopilot.WebApi.Plugins.Utils;
 
 public static class TokenUtils
 {

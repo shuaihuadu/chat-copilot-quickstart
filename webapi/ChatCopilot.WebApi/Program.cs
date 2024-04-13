@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+
 namespace ChatCopilot.WebApi;
 
 public sealed class Program
 {
-    public static void Main(string[] args)
+    public static async void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -23,12 +26,70 @@ public sealed class Program
         builder.Services.AddSignalR();
 
         builder.Services.AddHttpContextAccessor()
-            .AddApplicationInsightsTelemetry();
+            .AddApplicationInsightsTelemetry(options =>
+            {
+                options.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+            })
+            .AddSingleton<ITelemetryInitializer, ApplicationInsightsUserTelemetryInitializerService>()
+            .AddLogging(logBuilder => logBuilder.AddApplicationInsights())
+            .AddSingleton<ITelemetryService, ApplicationInsightsTelemetryService>();
 
-        var app = builder.Build();
+        TelemetryDebugWriter.IsTracingDisabled = Debugger.IsAttached;
 
-        app.MapGet("/", () => "Hello World!");
+        builder.Services.AddHttpClient();
 
-        app.Run();
+        builder.Services
+            .AddMaintenanceServices()
+            .AddEndpointsApiExplorer()
+            .AddSwaggerGen()
+            .AddCorsPolicy(builder.Configuration)
+            .AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            });
+
+        builder.Services.AddHealthChecks();
+
+        WebApplication app = builder.Build();
+
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
+        app.UseCors();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseMiddleware<MaintenanceMiddleware>();
+        app.MapControllers()
+            .RequireAuthorization();
+        app.MapHealthChecks("/healthz");
+
+        app.MapHub<MessageRelayHub>("/messageRelayHub");
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
+            app.MapWhen(
+                context => context.Request.Path == "/",
+                appBuilder => appBuilder.Run(
+                    async context => await Task.Run(() => context.Response.Redirect("/swagger"))
+                    )
+                );
+        }
+
+        Task runTask = app.RunAsync();
+
+        try
+        {
+            string? address = app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()?.Addresses.FirstOrDefault();
+
+            app.Services.GetRequiredService<ILogger>().LogInformation("Health probe: {0}/healthz", address);
+        }
+        catch (ObjectDisposedException)
+        {
+        }
+
+        await runTask;
     }
 }
