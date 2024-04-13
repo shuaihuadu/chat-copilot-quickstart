@@ -1,6 +1,6 @@
 ﻿namespace ChatCopilot.WebApi.Services;
 
-public interface IContentSaftyService : IDisposable
+public interface IContentSafetyService : IDisposable
 {
     Task<ImageAnalysisResponse> ImageAnalysisAsync(IFormFile formFile, CancellationToken cancellationToken);
 

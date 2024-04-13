@@ -1,4 +1,6 @@
-﻿namespace ChatCopilot.WebApi.Storage;
+﻿using Container = Microsoft.Azure.Cosmos.Container;
+
+namespace ChatCopilot.WebApi.Storage;
 
 public class CosmosDbContext<T> : IStorageContext<T>, IDisposable where T : IStorageEntity
 {

@@ -23,7 +23,7 @@ internal static class SemanticKernelExtensions
             return kernel;
         });
 
-        builder.Services.AddContentSafty();
+        builder.Services.AddContentSafety();
 
         builder.Services.AddScoped<RegisterFunctionsWithKernel>(sp => RegisterChatCopilotFunctionsAsync);
 
@@ -50,7 +50,7 @@ internal static class SemanticKernelExtensions
                 messageRelayHubContext: sp.GetRequiredService<IHubContext<MessageRelayHub>>(),
                 promptOptions: sp.GetRequiredService<IOptions<PromptsOptions>>(),
                 documentImportOptions: sp.GetRequiredService<IOptions<DocumentMemoryOptions>>(),
-                contentSafety: sp.GetRequiredService<AzureContentSafty>(),
+                contentSafety: sp.GetRequiredService<AzureContentSafety>(),
                 logger: sp.GetRequiredService<ILogger<ChatPlugin>>()
             ),
             nameof(ChatPlugin)
@@ -64,14 +64,14 @@ internal static class SemanticKernelExtensions
         builder.Services.AddSingleton(sp => new SemanticKernelProvider(sp, builder.Configuration, sp.GetRequiredService<IHttpClientFactory>()));
     }
 
-    private static void AddContentSafty(this IServiceCollection services)
+    private static void AddContentSafety(this IServiceCollection services)
     {
         IConfiguration configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
 
         ContentSafetyOptions contentSafetyOptions = configuration.GetSection(ContentSafetyOptions.PropertyName).Get<ContentSafetyOptions>()
             ?? new ContentSafetyOptions { Enabled = false };
 
-        services.AddSingleton<IContentSaftyService>(sp => new AzureContentSafty(contentSafetyOptions.Endpoint, contentSafetyOptions.Key));
+        services.AddSingleton<IContentSafetyService>(sp => new AzureContentSafety(contentSafetyOptions.Endpoint, contentSafetyOptions.Key));
     }
 
     public static WebApplicationBuilder AddBotConfig(this WebApplicationBuilder builder)

@@ -6,7 +6,7 @@ public record ImageContent([property: JsonPropertyName("content")] string Conten
 
 public record ImageAnalysisRequest([property: JsonPropertyName("image")] ImageContent Image);
 
-public sealed class AzureContentSafty : IContentSaftyService
+public sealed class AzureContentSafety : IContentSafetyService
 {
     private const string HttpUserAgent = "Chat Copilot";
 
@@ -14,7 +14,7 @@ public sealed class AzureContentSafty : IContentSaftyService
     private readonly HttpClient _httpClient;
     private readonly HttpClientHandler? _httpClientHandler;
 
-    public AzureContentSafty(string endpoint, string apiKey, HttpClientHandler httpClientHandler)
+    public AzureContentSafety(string endpoint, string apiKey, HttpClientHandler httpClientHandler)
     {
         this._endpoint = endpoint;
         this._httpClient = new HttpClient(httpClientHandler);
@@ -22,7 +22,7 @@ public sealed class AzureContentSafty : IContentSaftyService
         this._httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", apiKey);
     }
 
-    public AzureContentSafty(string endpoint, string apiKey)
+    public AzureContentSafety(string endpoint, string apiKey)
     {
         this._endpoint = endpoint;
         this._httpClientHandler = new HttpClientHandler { CheckCertificateRevocationList = true };
