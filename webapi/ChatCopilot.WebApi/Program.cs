@@ -1,11 +1,8 @@
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-
 namespace ChatCopilot.WebApi;
 
 public sealed class Program
 {
-    public static async void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 

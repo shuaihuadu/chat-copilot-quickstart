@@ -2,6 +2,7 @@
 global using ChatCopilot.Shared;
 global using ChatCopilot.WebApi.Attributes;
 global using ChatCopilot.WebApi.Auth;
+global using ChatCopilot.WebApi.Controllers;
 global using ChatCopilot.WebApi.Extensions;
 global using ChatCopilot.WebApi.Hubs;
 global using ChatCopilot.WebApi.Models.Request;
@@ -21,6 +22,8 @@ global using Microsoft.ApplicationInsights.Extensibility.Implementation;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Hosting.Server;
+global using Microsoft.AspNetCore.Hosting.Server.Features;
 global using Microsoft.AspNetCore.SignalR;
 global using Microsoft.Azure.Cosmos;
 global using Microsoft.Extensions.Options;
