@@ -96,6 +96,34 @@ public static class ServiceExtensions
         return services;
     }
 
+    internal static IServiceCollection AddMaintenanceServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IReadOnlyList<IMaintenanceAction>>(sp => []);
+
+        return services;
+    }
+
+    internal static IServiceCollection AddCorsPolicy(this IServiceCollection services, IConfiguration configuration)
+    {
+        string[] allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? [];
+
+        if (allowedOrigins.Length > 0)
+        {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.WithOrigins(allowedOrigins)
+                        .WithMethods("POST", "GET", "PUT", "DELETE", "PATCH")
+                        .AllowAnyHeader();
+                    });
+            });
+        }
+
+        return services;
+    }
+
     internal static IServiceCollection AddPersistentChatStore(this IServiceCollection services)
     {
         IStorageContext<ChatSession> chatSessionStorageContext;
