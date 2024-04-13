@@ -25,6 +25,7 @@ global using Microsoft.KernelMemory.Diagnostics;
 global using Microsoft.KernelMemory.MemoryStorage.DevTools;
 global using Microsoft.KernelMemory.Pipeline;
 global using Microsoft.SemanticKernel;
+global using Microsoft.SemanticKernel.ChatCompletion;
 global using Microsoft.SemanticKernel.Plugins.Core;
 global using SharpToken;
 global using System.Collections.Concurrent;
