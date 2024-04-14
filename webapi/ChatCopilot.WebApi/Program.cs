@@ -57,7 +57,7 @@ public sealed class Program
         app.UseAuthorization();
         app.UseMiddleware<MaintenanceMiddleware>();
         app.MapControllers()
-            .RequireAuthorization();
+           .RequireAuthorization();
         app.MapHealthChecks("/healthz");
 
         app.MapHub<MessageRelayHub>("/messageRelayHub");

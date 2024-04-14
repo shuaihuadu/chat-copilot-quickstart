@@ -57,4 +57,8 @@ global using System.Text.Encodings.Web;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using System.Text.RegularExpressions;
+global using WebApplication = Microsoft.AspNetCore.Builder.WebApplication;
+global using SearchResult = Microsoft.KernelMemory.SearchResult;
+global using Directory = System.IO.Directory;
+global using File = System.IO.File;
 global using JsonSerializer = System.Text.Json.JsonSerializer;
