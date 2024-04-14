@@ -5,7 +5,7 @@ public class ServiceOptions
     public const string PropertyName = "Service";
 
     [Range(0, int.MaxValue)]
-    public double? TimeoutLimitIns { get; set; }
+    public double? TimeoutLimitInS { get; set; }
 
     [Url]
     public string? KeyVault { get; set; }

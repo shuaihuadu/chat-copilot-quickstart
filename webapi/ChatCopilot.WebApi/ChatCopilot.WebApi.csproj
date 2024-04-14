@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<NoWarn>SKEXP0003,SKEXP0011,SKEXP0021,SKEXP0026,SKEXP0042,SKEXP0050,SKEXP0052,SKEXP0053,SKEXP0060</NoWarn>
+		<NoWarn>SKEXP0003,SKEXP0011,SKEXP0021,SKEXP0026,SKEXP0040,SKEXP0042,SKEXP0050,SKEXP0052,SKEXP0053,SKEXP0060</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -16,6 +16,9 @@
 		<PackageReference Include="Microsoft.KernelMemory.Abstractions" Version="0.36.240412.1" />
 		<PackageReference Include="Microsoft.KernelMemory.Core" Version="0.35.240412.2" />
 		<PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.7.1-alpha" />
+		<PackageReference Include="Microsoft.SemanticKernel.Plugins.MsGraph" Version="1.7.1-alpha" />
+		<PackageReference Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.7.1-alpha" />
+		<PackageReference Include="Microsoft.SemanticKernel.Plugins.OpenApi.Extensions" Version="1.7.1-alpha" />
 		<PackageReference Include="SharpToken" Version="2.0.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
