@@ -12,3 +12,4 @@
 /.idea
 appsettings.Production.json
 /webapi/ChatCopilotWebApi/appsettings.Development.json
+/webapi/ChatCopilot.WebApi/Properties/launchSettings.json
