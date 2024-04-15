@@ -99,7 +99,7 @@ public class PluginEndpoint
             return await this.CreateBadRequestResponseAsync(request, "Empty query.");
         }
 
-        int numResults = queries.ContainsKey("NumResults") ? int.Parse(queries["NumResults"]) : 0;
+        int numResults = queries.ContainsKey("NumResults") ? int.Parse(queries["NumResults"]!) : 0;
 
         if (numResults <= 0)
         {
@@ -124,7 +124,7 @@ public class PluginEndpoint
             this._logger.LogDebug("Searching the web for '{0}' within '{1}'", query, site);
         }
 
-        using HttpClient httpClient = new HttpClient();
+        using HttpClient httpClient = new();
 
         string queryString = $"?q={Uri.EscapeDataString(query)}";
         queryString += string.IsNullOrWhiteSpace(site) ? string.Empty : $"+site:{site}";
