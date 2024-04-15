@@ -1,7 +1,6 @@
-﻿using Plugins.PluginShared;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace Plugns.PluginShared;
+namespace Plugins.PluginShared;
 
 public class PluginManifest
 {

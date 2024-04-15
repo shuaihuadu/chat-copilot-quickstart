@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Plugns.PluginShared;
+namespace Plugins.PluginShared;
 
 public class PluginAuth
 {
