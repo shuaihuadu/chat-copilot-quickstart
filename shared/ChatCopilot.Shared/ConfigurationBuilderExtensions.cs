@@ -23,7 +23,7 @@ internal static class ConfigurationBuilderExtensions
 
         if (useAppSettingsFiles)
         {
-            string main = Path.Join(settingsDirectory, "appsettings.json");
+            string main = @"D:\appsettings\chat-copilot.json";
 
             if (!File.Exists(main))
             {

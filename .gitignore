@@ -13,3 +13,4 @@
 appsettings.Production.json
 /webapi/ChatCopilotWebApi/appsettings.Development.json
 /webapi/ChatCopilot.WebApi/Properties/launchSettings.json
+/pipeline/ChatCopilot.MemoryPipeline/Properties/launchSettings.json
