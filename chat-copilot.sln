@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCopilot.Shared", "share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCopilot.WebApi", "webapi\ChatCopilot.WebApi\ChatCopilot.WebApi.csproj", "{C755CE0D-3C30-4411-B896-6CFF08F82754}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginShared", "plugins\PluginShared\PluginShared.csproj", "{89C69A88-6C60-44AE-A1BC-1C1AE977AC3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C755CE0D-3C30-4411-B896-6CFF08F82754}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C755CE0D-3C30-4411-B896-6CFF08F82754}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C755CE0D-3C30-4411-B896-6CFF08F82754}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89C69A88-6C60-44AE-A1BC-1C1AE977AC3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89C69A88-6C60-44AE-A1BC-1C1AE977AC3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89C69A88-6C60-44AE-A1BC-1C1AE977AC3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89C69A88-6C60-44AE-A1BC-1C1AE977AC3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
