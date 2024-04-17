@@ -12,7 +12,7 @@ public class ChatSession : IStorageEntity
 
     public string SystemDescription { get; set; }
 
-    public string SafeSystemDescription => this.SafeSystemDescription.Replace("TimeSkill", "TimePlugin", StringComparison.OrdinalIgnoreCase);
+    public string SafeSystemDescription => this.SystemDescription.Replace("TimeSkill", "TimePlugin", StringComparison.OrdinalIgnoreCase);
 
     public float MemoryBalance { get; set; } = 0.5F;
 
