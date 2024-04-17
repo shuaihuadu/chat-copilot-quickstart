@@ -224,7 +224,7 @@ internal sealed class ServiceConfiguration
         {
             case string x when x.Equals("AzureOpenAI", StringComparison.OrdinalIgnoreCase):
             case string y when y.Equals("AzureOpenAIEmbedding", StringComparison.OrdinalIgnoreCase):
-                builder.Services.AddAzureOpenAIEmbeddingGeneration(this.GetServiceConfig<AzureOpenAIConfig>("AzureOpenAI") ?? this.GetServiceConfig<AzureOpenAIConfig>("AzureOpenAIEmbedding"));
+                builder.Services.AddAzureOpenAIEmbeddingGeneration(this.GetServiceConfig<AzureOpenAIConfig>("AzureOpenAIEmbedding"));
                 break;
             case string x when x.Equals("OpenAI", StringComparison.OrdinalIgnoreCase):
                 builder.Services.AddOpenAITextEmbeddingGeneration(this.GetServiceConfig<OpenAIConfig>("OpenAI"));

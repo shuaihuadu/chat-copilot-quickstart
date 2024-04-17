@@ -28,4 +28,8 @@
 		<ProjectReference Include="..\..\shared\ChatCopilot.Shared\ChatCopilot.Shared.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Plugins\OpenAi\" />
+	</ItemGroup>
+
 </Project>

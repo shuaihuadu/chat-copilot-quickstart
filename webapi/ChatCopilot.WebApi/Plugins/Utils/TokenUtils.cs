@@ -21,7 +21,7 @@ public static class TokenUtils
 
     internal static string GetFunctionKey(string? functionName)
     {
-        if (functionName == null || semanticFunctions.TryGetValue(functionName, out string? key))
+        if (functionName == null || !semanticFunctions.TryGetValue(functionName, out string? key))
         {
             throw new KeyNotFoundException($"Unknown token dependency {functionName}. Please define function as semanticFunctions entry in TokenUtils.cs");
         }
