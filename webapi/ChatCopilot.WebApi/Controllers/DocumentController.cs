@@ -22,9 +22,9 @@ public class DocumentController : ControllerBase
         ILogger<DocumentController> logger,
         IAuthInfo authInfo,
         IContentSafetyService contentSafetyService,
-        PromptsOptions promptOptions,
-        DocumentMemoryOptions documentMemoryOptions,
-        ContentSafetyOptions contentSafetyOptions,
+        IOptions<PromptsOptions> promptOptions,
+        IOptions<DocumentMemoryOptions> documentMemoryOptions,
+        IOptions<ContentSafetyOptions> contentSafetyOptions,
         ChatSessionRepository chatSessionRepository,
         ChatMemorySourceRepository chatMemorySourceRepository,
         ChatMessageRepository chatMessageRepository,
@@ -34,9 +34,9 @@ public class DocumentController : ControllerBase
         this._logger = logger;
         this._authInfo = authInfo;
         this._contentSafetyService = contentSafetyService;
-        this._promptOptions = promptOptions;
-        this._documentMemoryOptions = documentMemoryOptions;
-        this._contentSafetyOptions = contentSafetyOptions;
+        this._promptOptions = promptOptions.Value;
+        this._documentMemoryOptions = documentMemoryOptions.Value;
+        this._contentSafetyOptions = contentSafetyOptions.Value;
         this._chatSessionRepository = chatSessionRepository;
         this._chatMemorySourceRepository = chatMemorySourceRepository;
         this._chatMessageRepository = chatMessageRepository;
@@ -44,7 +44,7 @@ public class DocumentController : ControllerBase
         this._documentTypeProvider = documentTypeProvider;
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("documents")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

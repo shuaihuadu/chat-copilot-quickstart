@@ -495,3 +495,5 @@ tmp/*
 # Custom plugins in default directories
 */Skills/NativePlugins
 */Skills/SemanticPlugins
+/tools/ImportDocument/sample-docs/TEC.pdf
+/webapi/tmp/database/chatmemory
