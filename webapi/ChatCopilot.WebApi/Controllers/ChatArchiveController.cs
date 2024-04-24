@@ -1,34 +1,22 @@
 ﻿namespace ChatCopilot.WebApi.Controllers;
 
 [ApiController]
-public class ChatArchiveController : ControllerBase
+public class ChatArchiveController(
+    ILogger<ChatArchiveController> logger,
+    IKernelMemory kernelMemory,
+    IOptions<PromptsOptions> promptsOptions,
+    ChatSessionRepository chatSessionRepository,
+    ChatMessageRepository chatMessageRepository,
+    ChatParticipantRepository chatParticipantRepository,
+    ChatArchiveEmbeddingConfig chatArchiveEmbeddingConfig) : ControllerBase
 {
-    private readonly ILogger<ChatArchiveController> _logger;
-    private readonly IKernelMemory _kernelMemory;
-    private readonly ChatSessionRepository _chatSessionRepository;
-    private readonly ChatMessageRepository _chatMessageRepository;
-    private readonly ChatParticipantRepository _chatParticipantRepository;
-    private readonly ChatArchiveEmbeddingConfig _chatArchiveEmbeddingConfig;
-    private readonly PromptsOptions _promptsOptions;
-
-    public ChatArchiveController(
-        ILogger<ChatArchiveController> logger,
-        IKernelMemory kernelMemory,
-        IOptions<PromptsOptions> promptsOptions,
-        ChatSessionRepository chatSessionRepository,
-        ChatMessageRepository chatMessageRepository,
-        ChatParticipantRepository chatParticipantRepository,
-        ChatArchiveEmbeddingConfig chatArchiveEmbeddingConfig)
-    {
-        this._logger = logger;
-        this._kernelMemory = kernelMemory;
-        this._promptsOptions = promptsOptions.Value;
-
-        this._chatSessionRepository = chatSessionRepository;
-        this._chatMessageRepository = chatMessageRepository;
-        this._chatParticipantRepository = chatParticipantRepository;
-        this._chatArchiveEmbeddingConfig = chatArchiveEmbeddingConfig;
-    }
+    private readonly ILogger<ChatArchiveController> _logger = logger;
+    private readonly IKernelMemory _kernelMemory = kernelMemory;
+    private readonly ChatSessionRepository _chatSessionRepository = chatSessionRepository;
+    private readonly ChatMessageRepository _chatMessageRepository = chatMessageRepository;
+    private readonly ChatParticipantRepository _chatParticipantRepository = chatParticipantRepository;
+    private readonly ChatArchiveEmbeddingConfig _chatArchiveEmbeddingConfig = chatArchiveEmbeddingConfig;
+    private readonly PromptsOptions _promptsOptions = promptsOptions.Value;
 
     [HttpGet]
     [Route("chats/{chatId:guid}/archive")]

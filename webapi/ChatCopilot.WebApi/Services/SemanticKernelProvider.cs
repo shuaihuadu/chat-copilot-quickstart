@@ -1,13 +1,8 @@
 ﻿namespace ChatCopilot.WebApi.Services;
 
-public sealed class SemanticKernelProvider
+public sealed class SemanticKernelProvider(IServiceProvider serviceProvider, IConfiguration configuration, IHttpClientFactory httpClientFactory)
 {
-    private readonly IKernelBuilder _kernelBuilder;
-
-    public SemanticKernelProvider(IServiceProvider serviceProvider, IConfiguration configuration, IHttpClientFactory httpClientFactory)
-    {
-        this._kernelBuilder = InitializeCompletionKernel(serviceProvider, configuration, httpClientFactory);
-    }
+    private readonly IKernelBuilder _kernelBuilder = InitializeCompletionKernel(serviceProvider, configuration, httpClientFactory);
 
     public Kernel GetCompletionKernel() => this._kernelBuilder.Build();
 

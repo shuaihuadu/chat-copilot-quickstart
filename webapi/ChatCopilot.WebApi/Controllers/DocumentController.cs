@@ -1,48 +1,33 @@
 ﻿namespace ChatCopilot.WebApi.Controllers;
 
 [ApiController]
-public class DocumentController : ControllerBase
+public class DocumentController(
+    ILogger<DocumentController> logger,
+    IAuthInfo authInfo,
+    IContentSafetyService contentSafetyService,
+    IOptions<PromptsOptions> promptOptions,
+    IOptions<DocumentMemoryOptions> documentMemoryOptions,
+    IOptions<ContentSafetyOptions> contentSafetyOptions,
+    ChatSessionRepository chatSessionRepository,
+    ChatMemorySourceRepository chatMemorySourceRepository,
+    ChatMessageRepository chatMessageRepository,
+    ChatParticipantRepository chatParticipantRepository,
+    DocumentTypeProvider documentTypeProvider) : ControllerBase
 {
     private const string GlobalDocumentUploadClientCall = "GlobalDocumentUploaded";
     private const string ReceiveMessageClientCall = "ReceiveMessage";
 
-    private readonly ILogger<DocumentController> _logger;
-    private readonly IAuthInfo _authInfo;
-    private readonly IContentSafetyService _contentSafetyService;
-    private readonly PromptsOptions _promptOptions;
-    private readonly DocumentMemoryOptions _documentMemoryOptions;
-    private readonly ContentSafetyOptions _contentSafetyOptions;
-    private readonly ChatSessionRepository _chatSessionRepository;
-    private readonly ChatMemorySourceRepository _chatMemorySourceRepository;
-    private readonly ChatMessageRepository _chatMessageRepository;
-    private readonly ChatParticipantRepository _chatParticipantRepository;
-    private readonly DocumentTypeProvider _documentTypeProvider;
-
-    public DocumentController(
-        ILogger<DocumentController> logger,
-        IAuthInfo authInfo,
-        IContentSafetyService contentSafetyService,
-        IOptions<PromptsOptions> promptOptions,
-        IOptions<DocumentMemoryOptions> documentMemoryOptions,
-        IOptions<ContentSafetyOptions> contentSafetyOptions,
-        ChatSessionRepository chatSessionRepository,
-        ChatMemorySourceRepository chatMemorySourceRepository,
-        ChatMessageRepository chatMessageRepository,
-        ChatParticipantRepository chatParticipantRepository,
-        DocumentTypeProvider documentTypeProvider)
-    {
-        this._logger = logger;
-        this._authInfo = authInfo;
-        this._contentSafetyService = contentSafetyService;
-        this._promptOptions = promptOptions.Value;
-        this._documentMemoryOptions = documentMemoryOptions.Value;
-        this._contentSafetyOptions = contentSafetyOptions.Value;
-        this._chatSessionRepository = chatSessionRepository;
-        this._chatMemorySourceRepository = chatMemorySourceRepository;
-        this._chatMessageRepository = chatMessageRepository;
-        this._chatParticipantRepository = chatParticipantRepository;
-        this._documentTypeProvider = documentTypeProvider;
-    }
+    private readonly ILogger<DocumentController> _logger = logger;
+    private readonly IAuthInfo _authInfo = authInfo;
+    private readonly IContentSafetyService _contentSafetyService = contentSafetyService;
+    private readonly PromptsOptions _promptOptions = promptOptions.Value;
+    private readonly DocumentMemoryOptions _documentMemoryOptions = documentMemoryOptions.Value;
+    private readonly ContentSafetyOptions _contentSafetyOptions = contentSafetyOptions.Value;
+    private readonly ChatSessionRepository _chatSessionRepository = chatSessionRepository;
+    private readonly ChatMemorySourceRepository _chatMemorySourceRepository = chatMemorySourceRepository;
+    private readonly ChatMessageRepository _chatMessageRepository = chatMessageRepository;
+    private readonly ChatParticipantRepository _chatParticipantRepository = chatParticipantRepository;
+    private readonly DocumentTypeProvider _documentTypeProvider = documentTypeProvider;
 
     [HttpPost]
     [Route("documents")]
